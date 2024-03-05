@@ -3,13 +3,13 @@ pub enum CurrentScreen {
     Reading,
     Exit,
 }
-pub struct App{
-    pub current_screen:CurrentScreen,
+pub struct App {
+    pub current_screen: CurrentScreen,
 }
-impl App{
-    pub fn new()->App{
-        current_screen::Main,
+impl App {
+    pub fn new() -> App {
+        App {
+            current_screen: CurrentScreen::Main,
+        }
     }
 }
-
-
