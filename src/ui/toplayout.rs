@@ -5,6 +5,10 @@ use ratatui::{
     Frame,
 };
 
+use crate::ui::CITYLIGHT_WHITE;
+use crate::ui::PRIMARY_BLUE;
+use crate::ui::SECONDARY_WHITE;
+
 pub struct TopLayout {
     heading: String,
     time: String,
@@ -20,11 +24,7 @@ impl TopLayout {
             .split(outer_layout);
 
         let left_title = Paragraph::new(self.heading.as_str())
-            .style(
-                Style::default()
-                    .fg(Color::White)
-                    .bg(Color::Rgb(87, 88, 187)),
-            )
+            .style(Style::default().fg(CITYLIGHT_WHITE).bg(PRIMARY_BLUE))
             .block(
                 Block::default()
                     .borders(Borders::BOTTOM)
@@ -33,7 +33,7 @@ impl TopLayout {
             );
         let right_date = Paragraph::new(self.time.as_str())
             .right_aligned()
-            .style(Style::default().fg(Color::Rgb(87, 88, 187)))
+            .style(Style::default().fg(PRIMARY_BLUE))
             .block(
                 Block::default()
                     .borders(Borders::BOTTOM)
