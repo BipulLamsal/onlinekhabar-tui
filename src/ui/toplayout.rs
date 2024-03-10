@@ -7,7 +7,6 @@ use ratatui::{
 
 use crate::ui::CITYLIGHT_WHITE;
 use crate::ui::PRIMARY_BLUE;
-use crate::ui::SECONDARY_WHITE;
 
 pub struct TopLayout {
     heading: String,
@@ -44,3 +43,13 @@ impl TopLayout {
         f.render_widget(right_date, chunks[1]);
     }
 }
+
+//
+// pub fn ui(f: &mut Frame, app: &App) {
+//     match app.current_screen {
+//         CurrentScreen::Loading => loading::render_screen(f, app),
+//         CurrentScreen::Reading => println!("I am gay!"),
+//         CurrentScreen::Main => println!("I am not gay!"),
+//         CurrentScreen::Exit => println!("Exiting the bound"),
+//     }
+// }

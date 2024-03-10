@@ -27,7 +27,7 @@ impl App {
     }
     pub fn set_data(&mut self, news_data: Option<Vec<News>>) {
         self.news_data = news_data;
-        self.current_screen = CurrentScreen::Loading;
+        self.current_screen = CurrentScreen::Main;
     }
     pub fn news_fetch(number: i32) -> Option<Vec<News>> {
         let api_url = format!(
