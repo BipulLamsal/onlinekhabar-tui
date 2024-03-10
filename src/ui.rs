@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 
-use crossterm::style;
 use ratatui::{
     layout::{Constraint, Direction, Layout, Rect},
     style::{Color, Style, Styled},
@@ -16,14 +15,24 @@ pub const PRIMARY_BLACK: Color = Color::Rgb(45, 52, 54);
 pub const SECONDARY_WHITE: Color = Color::Rgb(178, 190, 195);
 pub const SECONDARY_BLACK: Color = Color::Rgb(99, 110, 114);
 
-use crate::app::App;
+use crate::app::{App, CurrentScreen};
 mod footerlayout;
+mod screen;
 mod toplayout;
 
 use footerlayout::FooterLayout;
 use toplayout::TopLayout;
 
+use self::screen::loading;
+
 pub fn ui(f: &mut Frame, app: &App) {
+    match app.current_screen {
+        CurrentScreen::Loading => loading::render_screen(f, app),
+        CurrentScreen::Reading => println!("I am gay!"),
+        CurrentScreen::Main => println!("I am not gay!"),
+        CurrentScreen::Exit => println!("Exiting the bound"),
+    }
+
     let white_block = Block::default()
         .style(Style::default().bg(CITYLIGHT_WHITE))
         .padding(Padding::new(1, 1, 1, 1));
@@ -45,6 +54,8 @@ pub fn ui(f: &mut Frame, app: &App) {
         String::from("online khabar [en]"),
         String::from("06 March,2024"),
     );
+
+    //main layout
 
     // footer layout description
     let helpkeybindings: HashMap<&str, &str> =

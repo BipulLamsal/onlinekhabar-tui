@@ -28,6 +28,14 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
             }
 
             match app.current_screen {
+                //loading screen
+                CurrentScreen::Loading => match key.code {
+                    KeyCode::Char('q') => {
+                        app.current_screen = CurrentScreen::Exit;
+                    }
+                    _ => {}
+                },
+
                 //mainscreen key combinations
                 CurrentScreen::Main => match key.code {
                     KeyCode::Char('o') => {
@@ -72,8 +80,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     stdout().execute(EnterAlternateScreen)?;
     stdout().execute(EnableMouseCapture)?;
     let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;
-
     let mut app = App::new();
+    let fetched_news = App::news_fetch(5);
+    app.set_data(fetched_news);
     let _res = run_app(&mut terminal, &mut app);
 
     //restore Terminal
