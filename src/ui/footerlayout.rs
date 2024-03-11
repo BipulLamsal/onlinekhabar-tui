@@ -1,12 +1,12 @@
 use ratatui::{
     layout::{Alignment, Constraint, Direction, Layout, Rect},
     prelude::*,
-    style::{Color, Style},
+    style::Style,
     symbols::border,
     text::Line,
     widgets::{
         block::{Position, Title},
-        Block, BorderType, Borders, Padding, Paragraph,
+        Block, Borders,
     },
     Frame,
 };

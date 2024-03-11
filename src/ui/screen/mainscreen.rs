@@ -1,21 +1,18 @@
 use std::collections::HashMap;
 
-use crossterm::{event::Event, style::ContentStyle};
 use ratatui::{
-    layout::{Constraint, Direction, Layout, Rect},
-    style::{Color, Modifier, Style, Styled, Stylize},
+    layout::{Constraint, Direction, Layout},
+    style::{Modifier, Style, Stylize},
     text::{Line, Span, Text},
-    widgets::{
-        Block, BorderType, Borders, Clear, List, ListItem, ListState, Padding, Paragraph, Wrap,
-    },
+    widgets::{Block, List, ListItem, Padding},
     Frame,
 };
 
+use crate::ui::CITYLIGHT_WHITE;
 use crate::{
     app::App,
     ui::{FooterLayout, TopLayout, PRIMARY_BLACK, PRIMARY_BLUE, SECONDARY_BLACK},
 };
-use crate::{app::News, ui::CITYLIGHT_WHITE};
 pub fn render_screen(f: &mut Frame, app: &App) {
     let white_block = Block::default()
         .style(Style::default().bg(CITYLIGHT_WHITE))
@@ -67,8 +64,7 @@ pub fn render_screen(f: &mut Frame, app: &App) {
     let list = List::new(items)
         .block(Block::default().fg(PRIMARY_BLACK))
         .highlight_style(Style::new().add_modifier(Modifier::REVERSED))
-        .highlight_symbol(">>")
-        .repeat_highlight_symbol(true);
+        .highlight_symbol("🧲 ");
 
     // footer layout description
     let helpkeybindings: HashMap<&str, &str> =

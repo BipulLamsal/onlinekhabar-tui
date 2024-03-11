@@ -1,4 +1,4 @@
-use crate::{app::App, ui::PRIMARY_BLUE};
+use crate::ui::PRIMARY_BLUE;
 // use crate::ui::FooterLayout;
 // use crate::ui::HashMap;
 // use crate::ui::TopLayout;
@@ -8,7 +8,6 @@ use ratatui::widgets::{BorderType, Borders, Paragraph, Wrap};
 use ratatui::{
     layout::{Constraint, Direction, Layout},
     style::{Style, Stylize},
-    text::Text,
     widgets::{Block, Padding},
     Frame,
 };

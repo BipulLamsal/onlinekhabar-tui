@@ -34,9 +34,6 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
             match app.current_screen {
                 //loading screen
                 CurrentScreen::Loading => match key.code {
-                    KeyCode::Char('q') => {
-                        app.current_screen = CurrentScreen::Exit;
-                    }
                     _ => {}
                 },
 
@@ -52,16 +49,21 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
                     KeyCode::Char('q') => {
                         app.current_screen = CurrentScreen::Exit;
                     }
+                    KeyCode::Up => {
+                        app.previous();
+                    }
+                    KeyCode::Down => {
+                        app.next();
+                    }
+                    KeyCode::Enter => {}
                     _ => {}
                 },
 
                 //exit screen key combinations
                 CurrentScreen::Exit => match key.code {
-                    KeyCode::Char('y') => {
-                        return Ok(true);
-                    }
+                    KeyCode::Char('y') => return Ok(true),
                     KeyCode::Char('n') | KeyCode::Char('q') => {
-                        return Ok(false);
+                        app.current_screen = CurrentScreen::Main
                     }
                     _ => {}
                 },
