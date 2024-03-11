@@ -1,4 +1,4 @@
-use ratatui::widgets::ListState;
+use ratatui::widgets::{ListState, ScrollbarState};
 use serde_json::Value;
 #[derive(Debug, Clone)]
 pub enum CurrentScreen {
@@ -11,6 +11,7 @@ pub enum CurrentScreen {
 //news json formating
 #[derive(Debug, Clone)]
 pub struct News {
+    pub id: String,
     pub title: String,
     pub link: String,
     pub content: String,
@@ -22,6 +23,7 @@ pub struct App {
     pub current_screen: CurrentScreen,
     pub news_data: Option<Vec<News>>,
     pub state: ListState,
+    pub scroll_state: ScrollbarState,
 }
 impl App {
     pub fn new() -> App {
@@ -29,6 +31,7 @@ impl App {
             current_screen: CurrentScreen::Loading,
             news_data: None,
             state: ListState::default(),
+            scroll_state: ScrollbarState::default(),
         }
     }
     pub fn set_data(&mut self, news_data: Option<Vec<News>>) {
@@ -42,6 +45,7 @@ impl App {
         );
         let res = reqwest::blocking::get(api_url).ok();
         let mut news_collection: Vec<News> = Vec::new();
+        let mut counter = 1;
         match res {
             Some(res) => {
                 if res.status().is_success() {
@@ -54,12 +58,14 @@ impl App {
                         let content = object.get("content")?.get("rendered")?.as_str()?;
                         let link = object.get("link")?.as_str()?;
                         let news_struct = News {
+                            id: counter.to_string(),
                             title: title.to_string(),
                             link: link.to_string(),
                             date: date.to_string(),
                             content: content.to_string(),
                         };
-                        news_collection.push(news_struct)
+                        news_collection.push(news_struct);
+                        counter += 1;
                     }
                 }
                 Some(news_collection)

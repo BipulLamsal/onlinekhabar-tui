@@ -20,7 +20,7 @@ use crate::{
 
 fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<bool> {
     terminal.draw(|f| ui(f, app))?;
-    let fetched_news = App::news_fetch(10);
+    let fetched_news = App::news_fetch(20);
     app.set_data(fetched_news);
 
     loop {

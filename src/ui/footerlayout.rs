@@ -10,16 +10,16 @@ use ratatui::{
     },
     Frame,
 };
-use std::collections::HashMap;
 
 use super::PRIMARY_BLACK;
 use super::PRIMARY_BLUE;
 
 pub struct FooterLayout<'a> {
-    helpkeys: HashMap<&'a str, &'a str>,
+    // helpkeys: HashMap<&'a str, &'a str>,
+    helpkeys: Vec<(&'a str, &'a str)>,
 }
 impl<'a> FooterLayout<'a> {
-    pub fn new(helpkeys: HashMap<&'a str, &'a str>) -> Self {
+    pub fn new(helpkeys: Vec<(&'a str, &'a str)>) -> Self {
         FooterLayout { helpkeys }
     }
     pub fn render(&self, outer_layout: Rect, f: &mut Frame) {

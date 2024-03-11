@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use ratatui::{
     layout::{Constraint, Direction, Layout},
     style::{Modifier, Style, Stylize},
@@ -13,7 +11,7 @@ use crate::{
     app::App,
     ui::{FooterLayout, TopLayout, PRIMARY_BLACK, PRIMARY_BLUE, SECONDARY_BLACK},
 };
-pub fn render_screen(f: &mut Frame, app: &App) {
+pub fn render_screen(f: &mut Frame, app: &mut App) {
     let white_block = Block::default()
         .style(Style::default().bg(CITYLIGHT_WHITE))
         .padding(Padding::new(1, 1, 1, 1));
@@ -45,7 +43,7 @@ pub fn render_screen(f: &mut Frame, app: &App) {
         .iter()
         .map(|i| {
             let content_span = Span::styled(
-                i.title.clone(),
+                i.id.clone() + "." + &i.title.clone(),
                 Style::new().fg(PRIMARY_BLACK).add_modifier(Modifier::BOLD),
             );
             let date_span = Span::styled(
@@ -67,12 +65,31 @@ pub fn render_screen(f: &mut Frame, app: &App) {
         .highlight_symbol("🧲 ");
 
     // footer layout description
-    let helpkeybindings: HashMap<&str, &str> =
-        HashMap::from([(" <q> ", "Quit"), (" <o> ", "Open")]);
+    let helpkeybindings: Vec<(&str, &str)> = vec![
+        (" <q> ", "Quit"),
+        (" <o> ", "Open"),
+        (" <h/↑> ", "Up"),
+        (" <j/↓>", "Down "),
+    ];
     let uifooterlayout = FooterLayout::new(helpkeybindings);
 
     // rendering layout
     f.render_stateful_widget(list, chunks[1], &mut event.state);
+    // render_scrollbar(f, app, chunks[1]);
     uitoplayout.render(chunks[0], f);
     uifooterlayout.render(chunks[2], f);
 }
+//
+// fn render_scrollbar(f: &mut Frame, app: &mut App, area: Rect) {
+//     f.render_stateful_widget(
+//         Scrollbar::default()
+//             .orientation(ScrollbarOrientation::VerticalRight)
+//             .begin_symbol(None)
+//             .end_symbol(None),
+//         area.inner(&Margin {
+//             vertical: 1,
+//             horizontal: 1,
+//         }),
+//         &mut app.scroll_state,
+//     );
+// }
