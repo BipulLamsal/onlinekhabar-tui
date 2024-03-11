@@ -14,16 +14,12 @@ mod app;
 mod ui;
 
 use crate::{
-    app::{App, CurrentScreen, Events},
+    app::{App, CurrentScreen},
     ui::ui,
 };
 
-fn run_app<B: Backend>(
-    terminal: &mut Terminal<B>,
-    app: &mut App,
-    event: &mut Events,
-) -> io::Result<bool> {
-    terminal.draw(|f| ui(f, &app))?;
+fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<bool> {
+    terminal.draw(|f| ui(f, app))?;
     let fetched_news = App::news_fetch(10);
     app.set_data(fetched_news);
 
@@ -89,7 +85,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     stdout().execute(EnableMouseCapture)?;
     let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;
     let mut app = App::new();
-    let _res = run_app(&mut terminal, &mut app, &mut event);
+    let _res = run_app(&mut terminal, &mut app);
 
     //restore Terminal
 

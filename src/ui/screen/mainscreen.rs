@@ -16,55 +16,6 @@ use crate::{
     ui::{FooterLayout, TopLayout, PRIMARY_BLACK, PRIMARY_BLUE, SECONDARY_BLACK},
 };
 use crate::{app::News, ui::CITYLIGHT_WHITE};
-
-struct Events {
-    items: Vec<News>,
-    state: ListState,
-}
-impl Events {
-    fn new(items: Vec<News>) -> Events {
-        Events {
-            items,
-            state: ListState::default(),
-        }
-    }
-    fn set_item(&mut self, items: Vec<News>) {
-        self.items = items;
-        self.state = ListState::default();
-    }
-    fn next(&mut self) {
-        let i = match self.state.selected() {
-            Some(i) => {
-                if i >= self.items.len() - 1 {
-                    0
-                } else {
-                    i + 1
-                }
-            }
-            None => 0,
-        };
-        self.state.select(Some(i));
-    }
-
-    fn previous(&mut self) {
-        let i = match self.state.selected() {
-            Some(i) => {
-                if i == 0 {
-                    self.items.len() - 1
-                } else {
-                    i - 1
-                }
-            }
-            None => 0,
-        };
-        self.state.select(Some(i));
-    }
-
-    pub fn unselect(&mut self) {
-        self.state.select(None);
-    }
-}
-
 pub fn render_screen(f: &mut Frame, app: &App) {
     let white_block = Block::default()
         .style(Style::default().bg(CITYLIGHT_WHITE))
@@ -89,10 +40,11 @@ pub fn render_screen(f: &mut Frame, app: &App) {
     );
 
     //main Layout
-    let news_vec = app.news_data.clone().unwrap();
-    let mut events = Events::new(news_vec);
-    let items: Vec<ListItem> = events
-        .items
+    let mut event = app.clone();
+    let items: Vec<ListItem> = event
+        .news_data
+        .clone()
+        .unwrap()
         .iter()
         .map(|i| {
             let content_span = Span::styled(
@@ -124,7 +76,7 @@ pub fn render_screen(f: &mut Frame, app: &App) {
     let uifooterlayout = FooterLayout::new(helpkeybindings);
 
     // rendering layout
-    f.render_stateful_widget(list, chunks[1], &mut events.state);
+    f.render_stateful_widget(list, chunks[1], &mut event.state);
     uitoplayout.render(chunks[0], f);
     uifooterlayout.render(chunks[2], f);
 }

@@ -21,12 +21,14 @@ pub struct News {
 pub struct App {
     pub current_screen: CurrentScreen,
     pub news_data: Option<Vec<News>>,
+    pub state: ListState,
 }
 impl App {
     pub fn new() -> App {
         App {
             current_screen: CurrentScreen::Loading,
             news_data: None,
+            state: ListState::default(),
         }
     }
     pub fn set_data(&mut self, news_data: Option<Vec<News>>) {
@@ -65,27 +67,12 @@ impl App {
             None => None,
         }
     }
-}
 
-pub struct Events {
-    pub items: Vec<News>,
-    pub state: ListState,
-}
-impl Events {
-    pub fn new(items: Vec<News>) -> Events {
-        Events {
-            items,
-            state: ListState::default(),
-        }
-    }
-    pub fn set_item(&mut self, items: Vec<News>) {
-        self.items = items;
-        self.state = ListState::default();
-    }
+    //here goes the operation of the stateful list present in the list
     pub fn next(&mut self) {
         let i = match self.state.selected() {
             Some(i) => {
-                if i >= self.items.len() - 1 {
+                if i >= self.news_data.clone().unwrap().len() - 1 {
                     0
                 } else {
                     i + 1
@@ -100,7 +87,7 @@ impl Events {
         let i = match self.state.selected() {
             Some(i) => {
                 if i == 0 {
-                    self.items.len() - 1
+                    self.news_data.clone().unwrap().len() - 1
                 } else {
                     i - 1
                 }

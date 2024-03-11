@@ -18,7 +18,7 @@ mod toplayout;
 use footerlayout::FooterLayout;
 use toplayout::TopLayout;
 
-pub fn ui(f: &mut Frame, app: &App) {
+pub fn ui(f: &mut Frame, app: &mut App) {
     match app.current_screen {
         CurrentScreen::Loading => loading::render_screen(f),
         CurrentScreen::Reading => mainscreen::render_screen(f, app),
