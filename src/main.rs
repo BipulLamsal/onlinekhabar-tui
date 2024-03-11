@@ -1,7 +1,7 @@
 use std::{error::Error, io};
 
 use crossterm::{
-    event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyEventKind},
+    event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode},
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
     ExecutableCommand,
 };
@@ -14,11 +14,19 @@ mod app;
 mod ui;
 
 use crate::{
-    app::{App, CurrentScreen},
+    app::{App, CurrentScreen, Events},
     ui::ui,
 };
 
-fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<bool> {
+fn run_app<B: Backend>(
+    terminal: &mut Terminal<B>,
+    app: &mut App,
+    event: &mut Events,
+) -> io::Result<bool> {
+    terminal.draw(|f| ui(f, &app))?;
+    let fetched_news = App::news_fetch(10);
+    app.set_data(fetched_news);
+
     loop {
         terminal.draw(|f| ui(f, app))?;
 
@@ -81,9 +89,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     stdout().execute(EnableMouseCapture)?;
     let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;
     let mut app = App::new();
-    let fetched_news = App::news_fetch(5);
-    app.set_data(fetched_news);
-    let _res = run_app(&mut terminal, &mut app);
+    let _res = run_app(&mut terminal, &mut app, &mut event);
 
     //restore Terminal
 

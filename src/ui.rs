@@ -22,7 +22,7 @@ pub fn ui(f: &mut Frame, app: &App) {
     match app.current_screen {
         CurrentScreen::Loading => loading::render_screen(f),
         CurrentScreen::Reading => mainscreen::render_screen(f, app),
-        CurrentScreen::Main => loading::render_screen(f),
+        CurrentScreen::Main => mainscreen::render_screen(f, app),
         CurrentScreen::Exit => println!("Exiting the bound"),
     }
 }
