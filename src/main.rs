@@ -12,7 +12,6 @@ use ratatui::{
 
 mod app;
 mod ui;
-
 use crate::{
     app::{App, CurrentScreen},
     ui::ui,
@@ -21,8 +20,10 @@ use crate::{
 fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<bool> {
     terminal.draw(|f| ui(f, app))?;
     let fetched_news = App::news_fetch(20);
-    app.set_data(fetched_news);
-
+    match fetched_news {
+        None => app.current_screen = CurrentScreen::Warning,
+        Some(i) => app.set_data(Some(i)),
+    }
     loop {
         terminal.draw(|f| ui(f, app))?;
 
@@ -49,10 +50,10 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
                     KeyCode::Char('q') => {
                         app.current_screen = CurrentScreen::Exit;
                     }
-                    KeyCode::Up => {
+                    KeyCode::Up | KeyCode::Char('h') => {
                         app.previous();
                     }
-                    KeyCode::Down => {
+                    KeyCode::Down | KeyCode::Char('j') => {
                         app.next();
                     }
                     KeyCode::Enter => {}
@@ -67,11 +68,26 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
                     }
                     _ => {}
                 },
+                //warnign screen quit method
+                CurrentScreen::Warning => match key.code {
+                    KeyCode::Char('q') => {
+                        return Ok(true);
+                    }
+                    _ => {}
+                },
 
                 //reading screen key combinations
                 CurrentScreen::Reading => match key.code {
                     KeyCode::Char('q') => {
                         app.current_screen = CurrentScreen::Main;
+                    }
+                    KeyCode::Up | KeyCode::Char('h') => {
+                        app.scroll = app.scroll.saturating_add(1);
+                        app.scroll_state = app.scroll_state.position(app.scroll);
+                    }
+                    KeyCode::Down | KeyCode::Char('j') => {
+                        app.scroll = app.scroll.saturating_sub(1);
+                        app.scroll_state = app.scroll_state.position(app.scroll);
                     }
                     _ => {}
                 },

@@ -2,7 +2,7 @@ use ratatui::{
     layout::{Constraint, Direction, Layout},
     style::{Modifier, Style, Stylize},
     text::{Line, Span, Text},
-    widgets::{Block, List, ListItem, Padding},
+    widgets::{Block, Clear, List, ListItem, Padding},
     Frame,
 };
 
@@ -11,7 +11,14 @@ use crate::{
     app::App,
     ui::{FooterLayout, TopLayout, PRIMARY_BLACK, PRIMARY_BLUE, SECONDARY_BLACK},
 };
+
 pub fn render_screen(f: &mut Frame, app: &mut App) {
+    // popup content
+    render_inner_info(f, app)
+}
+
+fn render_inner_info(f: &mut Frame, app: &mut App) {
+    f.render_widget(Clear, f.size());
     let white_block = Block::default()
         .style(Style::default().bg(CITYLIGHT_WHITE))
         .padding(Padding::new(1, 1, 1, 1));
@@ -31,7 +38,7 @@ pub fn render_screen(f: &mut Frame, app: &mut App) {
     // top layout description
     let uitoplayout = TopLayout::new(
         String::from("online khabar [en]"),
-        String::from("06 March,2024"),
+        String::from("List Mode"),
     );
 
     //main Layout
@@ -69,16 +76,17 @@ pub fn render_screen(f: &mut Frame, app: &mut App) {
         (" <q> ", "Quit"),
         (" <o> ", "Open"),
         (" <h/↑> ", "Up"),
-        (" <j/↓>", "Down "),
+        (" <j/↓> ", "Down "),
     ];
     let uifooterlayout = FooterLayout::new(helpkeybindings);
 
     // rendering layout
-    f.render_stateful_widget(list, chunks[1], &mut event.state);
+    f.render_stateful_widget(list.clone(), chunks[1], &mut event.state);
     // render_scrollbar(f, app, chunks[1]);
     uitoplayout.render(chunks[0], f);
     uifooterlayout.render(chunks[2], f);
 }
+
 //
 // fn render_scrollbar(f: &mut Frame, app: &mut App, area: Rect) {
 //     f.render_stateful_widget(

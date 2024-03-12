@@ -1,7 +1,7 @@
 use ratatui::layout::{Alignment, Constraint, Layout};
 use ratatui::prelude::Rect;
 use ratatui::style::Stylize;
-use ratatui::widgets::{Block, BorderType, Borders, Padding, Paragraph};
+use ratatui::widgets::{Block, BorderType, Borders, Clear, Padding, Paragraph};
 use ratatui::Frame;
 
 use super::{CITYLIGHT_WHITE, PRIMARY_BLUE};
@@ -17,10 +17,15 @@ pub fn render_screen(f: &mut Frame) {
         .bg(PRIMARY_BLUE)
         .fg(CITYLIGHT_WHITE)
         .alignment(Alignment::Center);
+    f.render_widget(Clear, area);
     f.render_widget(text, area);
 }
-
-fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
+// pub fn clear_screen(f: &mut Frame) {
+//     let area = centered_rect(60, 20, f.size());
+//     f.render_widget(Clear, area);
+// }
+//
+pub fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
     let popup_layout = Layout::vertical([
         Constraint::Percentage((100 - percent_y) / 2),
         Constraint::Percentage(percent_y),

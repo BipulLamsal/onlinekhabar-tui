@@ -1,11 +1,13 @@
 use ratatui::widgets::{ListState, ScrollbarState};
 use serde_json::Value;
+
 #[derive(Debug, Clone)]
 pub enum CurrentScreen {
     Loading,
     Main,
     Reading,
     Exit,
+    Warning,
 }
 
 //news json formating
@@ -23,6 +25,7 @@ pub struct App {
     pub current_screen: CurrentScreen,
     pub news_data: Option<Vec<News>>,
     pub state: ListState,
+    pub scroll: usize,
     pub scroll_state: ScrollbarState,
 }
 impl App {
@@ -30,7 +33,8 @@ impl App {
         App {
             current_screen: CurrentScreen::Loading,
             news_data: None,
-            state: ListState::default(),
+            state: ListState::default().with_selected(Some(0)),
+            scroll: 0,
             scroll_state: ScrollbarState::default(),
         }
     }
